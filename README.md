@@ -14,6 +14,10 @@ button on `index.html`, and the newest block in `changelog.html`. A changelog en
 link to a version that was actually published to the builds repo, which is why the history
 starts at 1.1.0 rather than at the first tag.
 
+Pages serves `style.css` with `cache-control: max-age=600`, so for ten minutes after a change
+your own browser keeps the old one. A layout that looks broken right after a push is usually
+that: hard-reload before believing it.
+
 `media/` holds the screen recordings and screenshots used on the overview. The two videos are
 unedited captures from a real phone; the stills come from an emulator. Keep them small, because
 GitHub Pages serves them on every visit and the page already carries several megabytes.
