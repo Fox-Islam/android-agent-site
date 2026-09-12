@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Changelog | android-agent</title>
-<meta name="description" content="Release history for android-agent, with a download for each version.">
+<title>Changelog | Android Agent</title>
+<meta name="description" content="Release history for Android Agent, with a download for each version.">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -17,10 +17,10 @@
 </nav>
 
 <h1>Changelog</h1>
-<p class="lede">Starts at 1.0.0. Earlier versions were not published.</p>
+<p class="lede">Starts at 1.1.0. Earlier versions were built but never published here.</p>
 
 <div class="release">
-  <h2>1.0.0 <span class="date">12 September 2026</span></h2>
+  <h2>1.1.0 <span class="date">12 September 2026</span></h2>
 
   <p>First published release. What it ships with:</p>
 
@@ -39,16 +39,27 @@
         other.</li>
     <li><strong>Saved scripts,</strong> callable by name and runnable by hand from a form, with no
         model in the loop.</li>
+    <li><strong>Backup and restore.</strong> One file carrying chats, scripts, saved tasks,
+        playbooks, rules, memory, servers and settings, so a reinstall or a new phone is not a
+        fresh start. Importing merges, so it never deletes what was only on the phone you opened
+        it on.</li>
     <li><strong>Saved tasks,</strong> for the ones you run often.</li>
     <li><strong>Playbooks,</strong> per-app notes that load only when that app is in front.</li>
     <li><strong>MCP servers</strong> over streamable HTTP, with a bearer token or none.</li>
-    <li><strong>The floating card,</strong> for watching a run and stopping it from inside another
-        app.</li>
+    <li><strong>A status indicator,</strong> for watching a run and stopping it from inside another
+        app, with questions reaching your notifications too.</li>
     <li><strong>Diagnostics export,</strong> which leaves out your API key, server tokens and
         anything typed into a password field.</li>
   </ul>
 
-  <p><a href="https://github.com/Fox-Islam/android-agent-builds/releases/download/v1.0.0/android-agent-1.0.0.apk">Download 1.0.0</a></p>
+  <p>The app is called Android Agent from this release. Earlier builds carried the repository
+  slug on the launcher and in the accessibility list, and the accessibility description named an
+  API the app has never required.</p>
+
+  <p>Fixed: an accessibility service that Android rebound could be left reported as off while it
+  was running, which stopped runs from starting at all.</p>
+
+  <p><a href="https://github.com/Fox-Islam/android-agent-builds/releases/download/v1.1.0/android-agent-1.1.0.apk">Download 1.1.0</a></p>
 </div>
 
 <footer>

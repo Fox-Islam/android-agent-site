@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>android-agent</title>
-<meta name="description" content="An on-device Android agent. You type a task, a model drives the phone. No PC, no adb, no root.">
+<title>Android Agent</title>
+<meta name="description" content="An on-device Android agent. You type a task, a model drives the phone.">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,13 +16,24 @@
   <a href="https://github.com/Fox-Islam/android-agent-builds/releases">All releases</a>
 </nav>
 
-<h1>android-agent</h1>
-<p class="lede">You type a task, a model drives the phone. No PC, no adb, no root.</p>
+<h1>Android Agent</h1>
+<p class="lede">You type a task, a model drives the phone.</p>
 
 <div class="download">
   <a class="btn" href="https://github.com/Fox-Islam/android-agent-builds/releases/latest/download/android-agent.apk">Download the APK</a>
-  <span class="meta">Version 1.0.0. Android only, sideload.</span>
+  <span class="meta">Version 1.1.0. Android only, <a href="#installing">sideload</a>.</span>
 </div>
+
+<figure class="demo">
+  <video controls muted playsinline preload="metadata" width="540" height="1200">
+    <source src="media/run.mp4" type="video/mp4">
+    Your browser cannot play this video. It shows the agent opening Settings, finding a row by
+    its label, and flipping one switch.
+  </video>
+  <figcaption>A saved script running on a real phone. It opens Settings, finds the row by its
+  label rather than by position, checks the switch before touching it, and stops. No model is
+  involved once the script exists.</figcaption>
+</figure>
 
 <h2>How it works</h2>
 
@@ -34,16 +45,59 @@ anything in it. Nothing is installed on a computer and the phone does not need t
 reads the screen again, until the task is done or it needs to ask you something.</p>
 
 <p>It runs on your own API key against whichever OpenAI-compatible endpoint you point it at.
-There is no account, no server of ours in the path, and no telemetry.</p>
+There is no account, no backend behind it, and no telemetry. Your screen goes to the provider you
+choose and to nobody else, unless you add an MCP server, which is the one way anything reaches a
+second destination.</p>
+
+<div class="shots">
+  <figure>
+    <img src="media/chat.png" alt="A chat transcript showing the agent's steps, each tool call
+    listed with what it did and what came back." loading="lazy" width="1080" height="2400">
+    <figcaption>Every step it took, and what each one returned.</figcaption>
+  </figure>
+  <figure>
+    <img src="media/scripts.png" alt="The Saved scripts screen, listing one script called
+    settings-toggle with a play button and a delete button." loading="lazy" width="1080" height="2400">
+    <figcaption>Scripts it worked out and kept, each one runnable by hand.</figcaption>
+  </figure>
+  <figure>
+    <img src="media/run-form.png" alt="A dialog headed Run settings-toggle, with a text field
+    labelled Which row to open and a switch labelled Switch on." loading="lazy" width="1080" height="2400">
+    <figcaption>Running one yourself: the script says what it needs, so it is a form.</figcaption>
+  </figure>
+</div>
+
+<h2 id="installing">Installing</h2>
+
+<ol>
+  <li>Download the APK and open it. Allow your browser or file manager to install unknown apps.</li>
+  <li>Launch it and give it an API key. OpenRouter by default, or any OpenAI-compatible endpoint.
+      The model has to support tool calling and image input.</li>
+  <li>Settings, then Accessibility, then Android Agent, then on. If the switch will not move,
+      Android is blocking it because the app was sideloaded: press and hold the app icon, open App
+      info, then the three-dot menu, and choose <strong>Allow restricted settings</strong>. The
+      switch works once that is enabled.</li>
+  <li>Allow the status indicator and notifications. Both are optional, but with both off the agent
+      can only ask you something while you are looking at the app.</li>
+  <li>Coming back to the app after a reinstall? The first screen has a restore link, and a backup
+      file brings your key with it, so you can skip step 2.</li>
+</ol>
+
+<div class="note">
+  <p>Every build is signed with the same key, so a new version installs over the top of the old one.
+  An APK from anywhere else will not, and should not be trusted to.</p>
+</div>
 
 <h2>What it can do</h2>
 
 <ul>
-  <li>Open apps, and read what is on screen as structure rather than pixels.</li>
+  <li>Work in any app on the phone, including ones that have no API and no integration.</li>
+  <li>Read the screen the way a screen reader does, by its labels, so it finds the right
+      button rather than guessing at a position.</li>
   <li>Tap, long-press, swipe, scroll, type, and press back, home or recents.</li>
-  <li>Work through a task one step at a time, keeping a checklist as it goes.</li>
-  <li>Ask you a question when it is stuck or when a choice is yours to make.</li>
-  <li>Call tools on an MCP server you have configured, for things that are not on the phone.</li>
+  <li>Keep a checklist through a long task, so you can see what it thinks is left.</li>
+  <li>Stop and ask you when it is stuck, or when the choice is yours to make.</li>
+  <li>Reach things that are not on the phone at all, through an MCP server you configure.</li>
 </ul>
 
 <h2>What it cannot do</h2>
@@ -83,9 +137,11 @@ below are in the app because of that, not in spite of it.</p>
 <div class="feature">
   <h3>Approval mode</h3>
   <p>Never ask, ask before risky steps, or ask before every step. The middle one is the default.
-  Risky means an irreversible-sounding label such as send, pay, delete, post or confirm, or a
-  money or password app in the foreground, or any MCP tool, since those act off the device.
-  Answering "Always" writes a rule scoped to the app it was granted in.</p>
+  Three things count as risky: a button whose label sounds irreversible, such as send, pay,
+  delete, post or confirm; a money or password app in the foreground; and any MCP tool, because
+  those act somewhere other than this phone.</p>
+  <p>Answering "Always" turns that decision into a rule, scoped to the app it was granted in, so
+  you are asked once rather than every time.</p>
 </div>
 
 <div class="feature">
@@ -99,9 +155,10 @@ below are in the app because of that, not in spite of it.</p>
 
 <div class="feature">
   <h3>Chats</h3>
-  <p>A chat is an append-only log of what happened. A follow-up resumes the real exchange, a run
-  the system killed can be picked back up, and long-pressing any message copies the chat up to
-  that point into a new one.</p>
+  <p>A follow-up carries on the real exchange rather than starting over, a run the system killed
+  can be picked back up where it stopped, and long-pressing any message copies the chat up to
+  that point into a new one, so you can try a second approach without losing the first. All three
+  work because a chat is a log of what happened rather than a summary of it.</p>
 </div>
 
 <div class="feature">
@@ -151,13 +208,16 @@ loops, and it cannot catch that limit and carry on.</p>
 
 <div class="feature">
   <h3>Saved tasks</h3>
-  <p>A task you run often, kept as text. Choosing it opens a new chat with the task already in it.</p>
+  <p>The things you ask for repeatedly, kept so you do not retype them. Choosing one opens a new
+  chat with the task already written and waiting, in case this time needs a detail changed.</p>
 </div>
 
 <div class="feature">
   <h3>Playbooks</h3>
-  <p>Notes that teach it one app at a time: where the button actually is, what the confirmation looks
-  like. Only the name sits in the prompt until that app is in front of it.</p>
+  <p>What you would tell someone using one app for the first time: where the button actually is,
+  what the confirmation looks like, what to avoid. It makes the agent reliable somewhere it was
+  clumsy. Only the name is loaded until that app is in front, so knowing twenty apps costs no more
+  per task than knowing one.</p>
 </div>
 
 <div class="feature">
@@ -167,9 +227,24 @@ loops, and it cannot catch that limit and carry on.</p>
 </div>
 
 <div class="feature">
-  <h3>The floating card</h3>
-  <p>While it works you are looking at some other app. The card is how it tells you what it is doing,
-  asks before anything irreversible, and gives you a stop button.</p>
+  <h3>Status indicator</h3>
+  <p>A small card that floats over whatever app the agent is working in. It says what the agent is
+  doing, asks you before anything irreversible, and carries a stop button, so you can follow a run
+  and halt it without returning to the app. Questions also reach your notifications, and turning on
+  one or the other matters: with both off, the agent can only reach you inside the app.</p>
+</div>
+
+<div class="feature">
+  <h3>Backup and restore</h3>
+  <p>There is no backend, so a reinstall would otherwise be total loss and a second phone would
+  start from nothing. Settings, then Back up and restore, writes one file holding everything: chats
+  with their full history, scripts, saved tasks, playbooks, rules, memory, servers and settings.
+  Opening that file on another phone brings it all across, and the first-run screen offers the same
+  thing, because someone reinstalling already has their key in the file.</p>
+  <p>Importing merges rather than replaces. New entries are added and anything sharing an id is
+  updated, so opening a backup on a phone already in use never deletes what was only there. The API
+  key and any server tokens travel by default, since a restore without them cannot reach a provider,
+  and you can leave them out when the file is going somewhere you would not put a password.</p>
 </div>
 
 <div class="feature">
@@ -179,23 +254,6 @@ loops, and it cannot catch that limit and carry on.</p>
   server token, or anything typed into a password field.</p>
 </div>
 
-<h2>Installing</h2>
-
-<ol>
-  <li>Download the APK and open it. Allow your browser or file manager to install unknown apps.</li>
-  <li>Launch it and give it an API key. OpenRouter by default, or any OpenAI-compatible endpoint.
-      The model has to support tool calling and image input.</li>
-  <li>Settings, then Accessibility, then android-agent, then on. If the switch is greyed out, go to
-      App info, then the three-dot menu, then <strong>Allow restricted settings</strong> first.
-      Android blocks this for sideloaded apps until you say otherwise.</li>
-  <li>Allow the floating card and notifications if you want them. Both are optional and both are
-      recommended.</li>
-</ol>
-
-<div class="note">
-  <p>Every build is signed with the same key, so a new version installs over the top of the old one.
-  An APK from anywhere else will not, and should not be trusted to.</p>
-</div>
 
 <footer>
   <p><a href="changelog.html">Changelog</a> &middot;
