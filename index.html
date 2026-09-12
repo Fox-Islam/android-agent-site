@@ -51,9 +51,9 @@ and tapping the same buttons.</p>
 
 <h2>How it works</h2>
 
-<p>The app registers an <code>AccessibilityService</code>, the same mechanism a screen reader
-uses. That is where all of its privilege comes from: it can read every window on screen and tap
-anything in it. Nothing is installed on a computer and the phone does not need to be rooted.</p>
+<p>It works in any app on the phone, without that app knowing or cooperating, because it uses
+the accessibility system a screen reader uses: it can read every window on screen and tap anything
+in it. Nothing is installed on a computer, and the phone does not need to be rooted.</p>
 
 <p>You give it a task in plain words. It reads the screen, decides on one action, takes it, then
 reads the screen again, until the task is done or it needs to ask you something.</p>
@@ -93,13 +93,15 @@ second destination.</p>
       switch works once that is enabled.</li>
   <li>Allow the status indicator and notifications. Both are optional, but with both off the agent
       can only ask you something while you are looking at the app.</li>
-  <li>Coming back to the app after a reinstall? The first screen has a restore link, and a backup
-      file brings your key with it, so you can skip step 2.</li>
 </ol>
 
+<p>Coming back after a reinstall, or setting up a second phone? The first screen has a restore
+link. A backup file carries your key, so you can skip step 2 entirely.</p>
+
 <div class="note">
-  <p>Every build is signed with the same key, so a new version installs over the top of the old one.
-  An APK from anywhere else will not, and should not be trusted to.</p>
+  <p>Every build is signed with the same key, so a new version installs straight over the old one
+  and keeps your chats and settings. An APK from anywhere else will refuse to install over it, which
+  is the intended behaviour: it is not the same app.</p>
 </div>
 
 <h2>What it can do</h2>
@@ -117,10 +119,12 @@ second destination.</p>
 <h2>What it cannot do</h2>
 
 <ul>
-  <li>See banking, payment or DRM screens. Those set <code>FLAG_SECURE</code> and capture black.</li>
+  <li>See banking, payment or DRM screens. Android blanks those to anything recording or
+      reading the screen, this app included.</li>
   <li>Act while the phone is locked or the screen is off.</li>
-  <li>Tap Android's own runtime permission dialogs.</li>
-  <li>Run inside apps that refuse to start while an accessibility service is enabled. Some do.</li>
+  <li>Tap Android's own permission pop-ups. Those you answer yourself.</li>
+  <li>Work inside the handful of apps that refuse to run at all while any accessibility service
+      is switched on.</li>
 </ul>
 
 <p>When it hits one of these it says so, rather than reporting a step it did not take.</p>
@@ -142,10 +146,12 @@ below are in the app because of that, not in spite of it.</p>
 
 <div class="feature">
   <h3>Rules</h3>
-  <p>One per line, first match wins:
-  <code>deny * in com.*bank*</code>, <code>ask type_text matching (?i)password|otp</code>,
-  <code>allow tap in com.android.settings</code>. They hold whether or not anyone is watching
-  the phone.</p>
+  <p>Standing limits you write once, for the places you never want it going and the things you
+  always want to be asked about. One per line, first match wins:</p>
+  <p><code>deny * in com.*bank*</code>, <code>ask type_text matching (?i)password|otp</code>,
+  <code>allow tap in com.android.settings</code>.</p>
+  <p>They apply whether or not anyone is watching the phone, which is the point of writing them
+  down rather than deciding in the moment.</p>
 </div>
 
 <div class="feature">
@@ -160,9 +166,10 @@ below are in the app because of that, not in spite of it.</p>
 
 <div class="feature">
   <h3>Plan mode</h3>
-  <p>Set per chat. The agent is handed a looking-only tool list until you approve the plan it
-  proposes, so it cannot touch anything before then. This is enforced by the app rather than
-  asked for in a prompt.</p>
+  <p>Turn it on for a chat and the agent can look but not touch. It reads the screen, tells you
+  what it intends to do, and waits. Nothing it could act with is available to it until you approve
+  the plan, so this is something the app enforces rather than something the agent is asked to
+  respect.</p>
 </div>
 
 <h2>Features</h2>
@@ -197,19 +204,23 @@ for _, want in ipairs { "Wi-Fi", "Bluetooth", "NFC" } do
   if node then phone.ensure({ text = want }, true) end
 end</code></pre>
 
-<p>A script gets no privilege for being a script. Every action inside it goes out through the same
-path as one the model asked for directly, so your rules and your approval mode apply to each tap in
-a loop, and every one of them lands in the chat log. The language holds the string, table and math
-libraries and the device functions, and nothing else: no file, network, class-loading or reflection
-access, not restricted but never loaded. A script stops after 120 actions or 90 seconds however it
-loops, and it cannot catch that limit and carry on.</p>
+<p>Every action inside a script is checked the same way as one the model asked for directly, so
+your rules and your approval mode apply to each tap in a loop, and each one lands in the chat log.
+A script is a way of deciding which actions happen, never a way of taking one that would otherwise
+have been refused.</p>
+
+<p>It is a small language on purpose. String, table and maths functions, and the device functions,
+and nothing else: no files, no network, no way to load more code. Those are not restricted, they
+are simply never there. A script stops after 120 actions or 90 seconds however it loops, and it
+cannot catch that limit and carry on.</p>
 
 <div class="feature">
   <h3>Saved scripts</h3>
-  <p>A script written into a call is gone when the chat scrolls. Saving one under a name, with a
-  sentence about what it does, means calling it later costs a name and its arguments rather than
-  thirty lines. Only the names and descriptions go in the prompt. One that will not compile is
-  refused at save time rather than failing inside a call that was relying on it.</p>
+  <p>A script the agent writes on the spot disappears when the chat scrolls, so the next time you
+  ask it works the whole thing out again. Saved under a name, it can be called instead, which is a
+  fraction of the cost and already known to work. The agent only carries the names and descriptions
+  around with it, so keeping twenty costs nothing until one is used. A script that will not run is
+  refused when it is saved, rather than failing later inside something that was relying on it.</p>
 </div>
 
 <div class="feature">
