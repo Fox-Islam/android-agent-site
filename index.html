@@ -85,8 +85,9 @@ second destination.</p>
 
 <ol>
   <li>Download the APK and open it. Allow your browser or file manager to install unknown apps.</li>
-  <li>Launch it and give it an API key. OpenRouter by default, or any OpenAI-compatible endpoint.
-      The model has to support tool calling and image input.</li>
+  <li>Launch it and give it an API key. OpenRouter by default, or any OpenAI-compatible
+      endpoint. The model needs to be able to use tools and to accept images, or it cannot
+      act on the phone or see the screen.</li>
   <li>Settings, then Accessibility, then Android Agent, then on. If the switch will not move,
       Android is blocking it because the app was sideloaded: press and hold the app icon, open App
       info, then the three-dot menu, and choose <strong>Allow restricted settings</strong>. The
@@ -225,10 +226,11 @@ cannot catch that limit and carry on.</p>
 
 <div class="feature">
   <h3>Running a script yourself</h3>
-  <p>Settings, then Saved scripts, gives each one a play button. A script says which values it wants,
-  so this is a form rather than a prompt: a switch for a yes-or-no, a field for a name. There is no
-  model in it and nothing to pay for, because the script already says what to do. What it does on the
-  way is approved and recorded exactly as if you had asked for it in words.</p>
+  <p>Each saved script has a play button, under Settings, then Saved scripts. A script says which
+  values it needs, so you get a form rather than a blank box: a switch for a yes-or-no, a field for
+  a name. Nothing is sent anywhere and nothing is charged, because the script already says what to
+  do. What it does on the way is approved and recorded exactly as if you had asked for it in
+  words.</p>
 </div>
 
 <div class="feature">
@@ -247,8 +249,10 @@ cannot catch that limit and carry on.</p>
 
 <div class="feature">
   <h3>MCP servers</h3>
-  <p>Tools that are not on this phone, alongside the ones that are. Streamable HTTP with a bearer
-  token or none. OAuth sign-in and stdio servers are not supported.</p>
+  <p>Tools that are not on this phone, sitting alongside the ones that are, so the agent can look
+  something up or reach another system in the middle of a task. Any server you can reach over HTTP,
+  with a bearer token or without one. Servers that expect you to sign in through a browser, or that
+  run as a local program rather than over the network, will not work here.</p>
 </div>
 
 <div class="feature">
@@ -274,8 +278,8 @@ cannot catch that limit and carry on.</p>
 
 <div class="feature">
   <h3>Diagnostics</h3>
-  <p>Settings, then Diagnostics, then Export bundles the current chat, your settings and the state of
-  the permissions into one file you can send with a bug report. It never includes your API key, any
+  <p>One file holding the current chat, your settings and which permissions are granted, for
+  sending with a bug report. Under Settings, then Diagnostics. It never includes your API key, any
   server token, or anything typed into a password field.</p>
 </div>
 
