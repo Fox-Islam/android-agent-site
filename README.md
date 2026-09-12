@@ -14,4 +14,8 @@ button on `index.html`, and the newest block in `changelog.html`. A changelog en
 link to a version that was actually published to the builds repo, which is why the history
 starts at 1.1.0 rather than at the first tag.
 
+`media/` holds the screen recordings and screenshots used on the overview. The two videos are
+unedited captures from a real phone; the stills come from an emulator. Keep them small, because
+GitHub Pages serves them on every visit and the page already carries several megabytes.
+
 The APKs live in that repo, not this one. The source is private.

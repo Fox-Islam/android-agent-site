@@ -24,16 +24,30 @@
   <span class="meta">Version 1.1.0. Android only, <a href="#installing">sideload</a>.</span>
 </div>
 
-<figure class="demo">
-  <video controls muted playsinline preload="metadata" width="540" height="1200">
-    <source src="media/run.mp4" type="video/mp4">
-    Your browser cannot play this video. It shows the agent opening Settings, finding a row by
-    its label, and flipping one switch.
-  </video>
-  <figcaption>A saved script running on a real phone. It opens Settings, finds the row by its
-  label rather than by position, checks the switch before touching it, and stops. No model is
-  involved once the script exists.</figcaption>
-</figure>
+<div class="demos">
+  <figure>
+    <video controls muted playsinline preload="metadata" width="576" height="1280">
+      <source src="media/thermostat.mp4" type="video/mp4">
+    </video>
+    <figcaption><strong>&ldquo;What are the temps in my house like? Are my thermostat
+    settings optimal?&rdquo;</strong> It opens the thermostat app, reads the schedule and the
+    current humidity, and answers with what it would change and why. Then it says it has not
+    changed anything and asks whether to. 53 seconds, and about 28p on Opus.</figcaption>
+  </figure>
+  <figure>
+    <video controls muted playsinline preload="metadata" width="576" height="1280">
+      <source src="media/duolingo.mp4" type="video/mp4">
+    </video>
+    <figcaption><strong>&ldquo;Open Duolingo, go through the next review lesson without fully
+    completing it, and tell me what the shortcomings of the app are.&rdquo;</strong> It works
+    through the lesson itself, then reports on both the app and the learner. Just under four
+    minutes, unedited.</figcaption>
+  </figure>
+</div>
+
+<p class="demo-note">Both recorded on a real phone, nothing sped up or cut. Neither task has an
+API, an integration or an export behind it: the agent is reading the same screen you would and
+tapping the same buttons.</p>
 
 <h2>How it works</h2>
 

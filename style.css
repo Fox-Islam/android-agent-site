@@ -167,26 +167,37 @@ footer {
 
 figure { margin: 0 0 16px; }
 
-.demo {
+/* Two recordings side by side, stacking on a narrow screen. */
+.demos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 28px;
+  margin: 28px 0 16px;
+}
+
+.demos figure {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  margin: 28px 0 8px;
 }
 
-.demo video {
+/* A 576x1280 recording at full column width is 750px tall, which turns the top of the page
+   into a wall of phone. Held to something nearer the size the thing actually is. */
+.demos video {
   width: 100%;
-  max-width: 270px;
+  max-width: 215px;
   height: auto;
   border: 1px solid var(--rule);
   border-radius: 12px;
   background: var(--card);
+  margin-bottom: 10px;
 }
 
-.demo figcaption {
-  max-width: 34rem;
-  text-align: center;
+.demos figcaption strong { color: var(--fg); font-weight: 600; }
+
+.demo-note {
+  color: var(--muted);
+  font-size: 0.9rem;
 }
 
 figcaption {
