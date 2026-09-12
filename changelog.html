@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Changelog | android-agent</title>
+<meta name="description" content="Release history for android-agent, with a download for each version.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+
+<nav class="top">
+  <a href="./">Overview</a>
+  <a href="changelog.html">Changelog</a>
+  <a href="https://github.com/Fox-Islam/android-agent-builds/releases">All releases</a>
+</nav>
+
+<h1>Changelog</h1>
+<p class="lede">Starts at 1.0.0. Earlier versions were not published.</p>
+
+<div class="release">
+  <h2>1.0.0 <span class="date">12 September 2026</span></h2>
+
+  <p>First published release. What it ships with:</p>
+
+  <ul>
+    <li><strong>The agent loop.</strong> A task in plain words, read the screen, one action,
+        read again. It can open apps, tap, long-press, swipe, scroll, type, and press back, home
+        or recents, and it keeps a checklist across the steps.</li>
+    <li><strong>Rules, approval mode and plan mode.</strong> Three layers checked before every
+        action, covered on the <a href="./">overview</a>.</li>
+    <li><strong>Chats.</strong> Append-only, so a follow-up resumes the real exchange and a run
+        that was killed can be picked back up. Long-press a message to fork the chat there.</li>
+    <li><strong>A second, cheaper model</strong> for the mechanical steps, with the chosen model
+        kept for planning, recovery and anything you say.</li>
+    <li><strong>Lua scripts</strong> the agent can write and run on the phone, for the steps that
+        have to be decided as they happen. Every action inside one is checked and logged like any
+        other.</li>
+    <li><strong>Saved scripts,</strong> callable by name and runnable by hand from a form, with no
+        model in the loop.</li>
+    <li><strong>Saved tasks,</strong> for the ones you run often.</li>
+    <li><strong>Playbooks,</strong> per-app notes that load only when that app is in front.</li>
+    <li><strong>MCP servers</strong> over streamable HTTP, with a bearer token or none.</li>
+    <li><strong>The floating card,</strong> for watching a run and stopping it from inside another
+        app.</li>
+    <li><strong>Diagnostics export,</strong> which leaves out your API key, server tokens and
+        anything typed into a password field.</li>
+  </ul>
+
+  <p><a href="https://github.com/Fox-Islam/android-agent-builds/releases/download/v1.0.0/android-agent-1.0.0.apk">Download 1.0.0</a></p>
+</div>
+
+<footer>
+  <p><a href="./">Overview</a> &middot;
+     <a href="https://github.com/Fox-Islam/android-agent-builds/releases">All releases</a></p>
+</footer>
+
+</div>
+</body>
+</html>

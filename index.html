@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>android-agent</title>
+<meta name="description" content="An on-device Android agent. You type a task, a model drives the phone. No PC, no adb, no root.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+
+<nav class="top">
+  <a href="./">Overview</a>
+  <a href="changelog.html">Changelog</a>
+  <a href="https://github.com/Fox-Islam/android-agent-builds/releases">All releases</a>
+</nav>
+
+<h1>android-agent</h1>
+<p class="lede">You type a task, a model drives the phone. No PC, no adb, no root.</p>
+
+<div class="download">
+  <a class="btn" href="https://github.com/Fox-Islam/android-agent-builds/releases/latest/download/android-agent.apk">Download the APK</a>
+  <span class="meta">Version 1.0.0. Android only, sideload.</span>
+</div>
+
+<h2>How it works</h2>
+
+<p>The app registers an <code>AccessibilityService</code>, the same mechanism a screen reader
+uses. That is where all of its privilege comes from: it can read every window on screen and tap
+anything in it. Nothing is installed on a computer and the phone does not need to be rooted.</p>
+
+<p>You give it a task in plain words. It reads the screen, decides on one action, takes it, then
+reads the screen again, until the task is done or it needs to ask you something.</p>
+
+<p>It runs on your own API key against whichever OpenAI-compatible endpoint you point it at.
+There is no account, no server of ours in the path, and no telemetry.</p>
+
+<h2>What it can do</h2>
+
+<ul>
+  <li>Open apps, and read what is on screen as structure rather than pixels.</li>
+  <li>Tap, long-press, swipe, scroll, type, and press back, home or recents.</li>
+  <li>Work through a task one step at a time, keeping a checklist as it goes.</li>
+  <li>Ask you a question when it is stuck or when a choice is yours to make.</li>
+  <li>Call tools on an MCP server you have configured, for things that are not on the phone.</li>
+</ul>
+
+<h2>What it cannot do</h2>
+
+<ul>
+  <li>See banking, payment or DRM screens. Those set <code>FLAG_SECURE</code> and capture black.</li>
+  <li>Act while the phone is locked or the screen is off.</li>
+  <li>Tap Android's own runtime permission dialogs.</li>
+  <li>Run inside apps that refuse to start while an accessibility service is enabled. Some do.</li>
+</ul>
+
+<p>When it hits one of these it says so, rather than reporting a step it did not take.</p>
+
+<h2>Why it is not on the Play Store</h2>
+
+<p>Google's policy allows the accessibility APIs only for apps that exist to help users with
+disabilities. An app that uses the same APIs for general automation does not qualify, whatever it
+does with them. So the only way to distribute it is sideloading, and the only way to install it
+is to allow your browser or file manager to install unknown apps.</p>
+
+<p>That cuts both ways, so it is worth being plain about it: you are installing something that can
+read and tap anything on your screen, from a download rather than from a store review. The controls
+below are in the app because of that, not in spite of it.</p>
+
+<h2>Deciding what it is allowed to do</h2>
+
+<p>Three layers, checked before every action.</p>
+
+<div class="feature">
+  <h3>Rules</h3>
+  <p>One per line, first match wins:
+  <code>deny * in com.*bank*</code>, <code>ask type_text matching (?i)password|otp</code>,
+  <code>allow tap in com.android.settings</code>. They hold whether or not anyone is watching
+  the phone.</p>
+</div>
+
+<div class="feature">
+  <h3>Approval mode</h3>
+  <p>Never ask, ask before risky steps, or ask before every step. The middle one is the default.
+  Risky means an irreversible-sounding label such as send, pay, delete, post or confirm, or a
+  money or password app in the foreground, or any MCP tool, since those act off the device.
+  Answering "Always" writes a rule scoped to the app it was granted in.</p>
+</div>
+
+<div class="feature">
+  <h3>Plan mode</h3>
+  <p>Set per chat. The agent is handed a looking-only tool list until you approve the plan it
+  proposes, so it cannot touch anything before then. This is enforced by the app rather than
+  asked for in a prompt.</p>
+</div>
+
+<h2>Features</h2>
+
+<div class="feature">
+  <h3>Chats</h3>
+  <p>A chat is an append-only log of what happened. A follow-up resumes the real exchange, a run
+  the system killed can be picked back up, and long-pressing any message copies the chat up to
+  that point into a new one.</p>
+</div>
+
+<div class="feature">
+  <h3>Two models</h3>
+  <p>Set a second, cheaper model and the run uses it for mechanical steps, tapping and looking and
+  waiting, then goes back to the chosen model to plan, to recover from anything unexpected, and
+  whenever you say something. In testing that was the difference between $0.07 and $0.016 for the
+  same task.</p>
+</div>
+
+<div class="feature">
+  <h3>Scripts</h3>
+  <p>Some steps cannot be decided in advance: tapping a toggle that is already on turns it off, and
+  a list has to be scrolled until the thing appears, however many swipes that takes. The agent can
+  write a short Lua script and run it on the phone instead of paying a round trip to the model
+  between every pair of taps.</p>
+</div>
+
+<pre><code>phone.open("Settings")
+for _, want in ipairs { "Wi-Fi", "Bluetooth", "NFC" } do
+  local node = phone.waitFor({ text = want }, 4000)
+  if node then phone.ensure({ text = want }, true) end
+end</code></pre>
+
+<p>A script gets no privilege for being a script. Every action inside it goes out through the same
+path as one the model asked for directly, so your rules and your approval mode apply to each tap in
+a loop, and every one of them lands in the chat log. The language holds the string, table and math
+libraries and the device functions, and nothing else: no file, network, class-loading or reflection
+access, not restricted but never loaded. A script stops after 120 actions or 90 seconds however it
+loops, and it cannot catch that limit and carry on.</p>
+
+<div class="feature">
+  <h3>Saved scripts</h3>
+  <p>A script written into a call is gone when the chat scrolls. Saving one under a name, with a
+  sentence about what it does, means calling it later costs a name and its arguments rather than
+  thirty lines. Only the names and descriptions go in the prompt. One that will not compile is
+  refused at save time rather than failing inside a call that was relying on it.</p>
+</div>
+
+<div class="feature">
+  <h3>Running a script yourself</h3>
+  <p>Settings, then Saved scripts, gives each one a play button. A script says which values it wants,
+  so this is a form rather than a prompt: a switch for a yes-or-no, a field for a name. There is no
+  model in it and nothing to pay for, because the script already says what to do. What it does on the
+  way is approved and recorded exactly as if you had asked for it in words.</p>
+</div>
+
+<div class="feature">
+  <h3>Saved tasks</h3>
+  <p>A task you run often, kept as text. Choosing it opens a new chat with the task already in it.</p>
+</div>
+
+<div class="feature">
+  <h3>Playbooks</h3>
+  <p>Notes that teach it one app at a time: where the button actually is, what the confirmation looks
+  like. Only the name sits in the prompt until that app is in front of it.</p>
+</div>
+
+<div class="feature">
+  <h3>MCP servers</h3>
+  <p>Tools that are not on this phone, alongside the ones that are. Streamable HTTP with a bearer
+  token or none. OAuth sign-in and stdio servers are not supported.</p>
+</div>
+
+<div class="feature">
+  <h3>The floating card</h3>
+  <p>While it works you are looking at some other app. The card is how it tells you what it is doing,
+  asks before anything irreversible, and gives you a stop button.</p>
+</div>
+
+<div class="feature">
+  <h3>Diagnostics</h3>
+  <p>Settings, then Diagnostics, then Export bundles the current chat, your settings and the state of
+  the permissions into one file you can send with a bug report. It never includes your API key, any
+  server token, or anything typed into a password field.</p>
+</div>
+
+<h2>Installing</h2>
+
+<ol>
+  <li>Download the APK and open it. Allow your browser or file manager to install unknown apps.</li>
+  <li>Launch it and give it an API key. OpenRouter by default, or any OpenAI-compatible endpoint.
+      The model has to support tool calling and image input.</li>
+  <li>Settings, then Accessibility, then android-agent, then on. If the switch is greyed out, go to
+      App info, then the three-dot menu, then <strong>Allow restricted settings</strong> first.
+      Android blocks this for sideloaded apps until you say otherwise.</li>
+  <li>Allow the floating card and notifications if you want them. Both are optional and both are
+      recommended.</li>
+</ol>
+
+<div class="note">
+  <p>Every build is signed with the same key, so a new version installs over the top of the old one.
+  An APK from anywhere else will not, and should not be trusted to.</p>
+</div>
+
+<footer>
+  <p><a href="changelog.html">Changelog</a> &middot;
+     <a href="https://github.com/Fox-Islam/android-agent-builds/releases">All releases</a></p>
+</footer>
+
+</div>
+</body>
+</html>
