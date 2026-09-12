@@ -19,7 +19,8 @@ your own browser keeps the old one. A layout that looks broken right after a pus
 that: hard-reload before believing it.
 
 `media/` holds the screen recordings and screenshots used on the overview. The two videos are
-unedited captures from a real phone; the stills come from an emulator. Keep them small, because
+captures from a real phone, nothing cut, though the middle of the Duolingo one is sped up; the
+stills come from an emulator. If you re-cut a video, check the caption still describes it. Keep them small, because
 GitHub Pages serves them on every visit and the page already carries several megabytes.
 
 The APKs live in that repo, not this one. The source is private.
