@@ -2,6 +2,8 @@
 
 The GitHub Pages site for Android Agent: https://fox-islam.github.io/android-agent-site/
 
+View the source code for the app at [Fox-Islam/android-agent](https://github.com/Fox-Islam/android-agent).
+
 Plain HTML and one stylesheet, served from `main`. No build step.
 
 - `index.html` is the overview: what it does, what it cannot do, the features, installing.
